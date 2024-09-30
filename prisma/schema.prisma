@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Composer {
+  id                         Int                          @id @default(autoincrement())
+  displayName                String                       
+  fullName                   String                       @unique
+  description                String?                      @db.Text
+  author                     String                       
+  isTopPageLinked            Boolean  @default(true)
+  composerCountries          ComposerCountriesCountry[]
+  tunes                      Tune[]
+}
+
+model ComposerCountriesCountry {
+  composerId Int
+  countryId  Int
+  composer   Composer @relation(fields: [composerId], references: [id])
+  country    Country  @relation(fields: [countryId], references: [id])
+
+  @@id([composerId, countryId])
+  @@index([composerId])
+  @@index([countryId])
+}
+
+model Country {
+  id                         Int                          @id @default(autoincrement())
+  name                       String                       @unique
+  description                String?                      @db.Text
+  composerCountries          ComposerCountriesCountry[]
+}
+
+model Genre {
+  id                Int                 @id @default(autoincrement())
+  name              String              @unique
+  isTopPageLinked   Int                 @default(0) @db.TinyInt
+  description       String?             @db.Text
+  tuneGenres        TuneGenresGenre[]
+}
+
+model Playstyle {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  sortOrder   Int
+  description String?       @db.Text
+  tunes       Tune[]
+}
+
+model Tune {
+  id                 Int                 @id @default(autoincrement())
+  createdAt          DateTime            @default(now()) @db.DateTime(0)
+  updatedAt          DateTime            @default(now()) @db.DateTime(0)
+  title              String              
+  author             String              
+  description        String?             @db.Text
+  composerId         Int
+  playstyleId        Int?
+  playstyle          Playstyle?          @relation(fields: [playstyleId], references: [id])
+  composer           Composer            @relation(fields: [composerId], references: [id])
+  tuneGenres         TuneGenresGenre[]
+
+  @@unique([title, playstyleId, composerId])
+  @@index([playstyleId])
+  @@index([composerId])
+}
+
+model TuneGenresGenre {
+  tuneId  Int
+  genreId Int
+  tune    Tune   @relation(fields: [tuneId], references: [id])
+  genre   Genre  @relation(fields: [genreId], references: [id])
+
+  @@id([tuneId, genreId])
+  @@index([tuneId])
+  @@index([genreId])
+}

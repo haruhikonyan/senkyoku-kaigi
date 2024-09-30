@@ -1,0 +1,16 @@
+services:
+  app:
+    image: mcr.microsoft.com/vscode/devcontainers/base:latest
+    volumes:
+      - ..:/senkyok-kaigi:delegated
+    env_file:
+      - .env
+    tty: true
+  db:
+    image: mysql:9.0.1
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mysql_data:/var/lib/mysql
+volumes:
+  mysql_data:

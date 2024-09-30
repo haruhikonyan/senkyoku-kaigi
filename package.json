@@ -1,0 +1,27 @@
+{
+  "name": "senkyok-kaigi",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "biome check",
+    "lint:fix": "biome check --write"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "next": "14.2.13",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@prisma/client": "^5.20.0",
+    "@biomejs/biome": "^1.9.2",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "prisma": "^5.20.0",
+    "typescript": "^5"
+  }
+}
