@@ -10,7 +10,7 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["biomejs.biome", "mhutchie.git-graph"],
+      "extensions": ["biomejs.biome", "mhutchie.git-graph", "Prisma.prisma"],
       "settings": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "biomejs.biome",

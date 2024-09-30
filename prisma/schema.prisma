@@ -14,14 +14,14 @@ datasource db {
 }
 
 model Composer {
-  id                         Int                          @id @default(autoincrement())
-  displayName                String                       
-  fullName                   String                       @unique
-  description                String?                      @db.Text
-  author                     String                       
-  isTopPageLinked            Boolean  @default(true)
-  composerCountries          ComposerCountriesCountry[]
-  tunes                      Tune[]
+  id                Int                        @id @default(autoincrement())
+  displayName       String
+  fullName          String                     @unique
+  description       String?                    @db.Text
+  author            String
+  isTopPageLinked   Boolean                    @default(true)
+  composerCountries ComposerCountriesCountry[]
+  tunes             Tune[]
 }
 
 model ComposerCountriesCountry {
@@ -36,40 +36,44 @@ model ComposerCountriesCountry {
 }
 
 model Country {
-  id                         Int                          @id @default(autoincrement())
-  name                       String                       @unique
-  description                String?                      @db.Text
-  composerCountries          ComposerCountriesCountry[]
+  id                Int                        @id @default(autoincrement())
+  name              String                     @unique
+  description       String?                    @db.Text
+  composerCountries ComposerCountriesCountry[]
 }
 
 model Genre {
-  id                Int                 @id @default(autoincrement())
-  name              String              @unique
-  isTopPageLinked   Int                 @default(0) @db.TinyInt
-  description       String?             @db.Text
-  tuneGenres        TuneGenresGenre[]
+  id              Int               @id @default(autoincrement())
+  name            String            @unique
+  isTopPageLinked Int               @default(0) @db.TinyInt
+  description     String?           @db.Text
+  tuneGenres      TuneGenresGenre[]
 }
 
 model Playstyle {
-  id          Int           @id @default(autoincrement())
-  name        String        @unique
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
   sortOrder   Int
-  description String?       @db.Text
+  description String? @db.Text
   tunes       Tune[]
 }
 
 model Tune {
-  id                 Int                 @id @default(autoincrement())
-  createdAt          DateTime            @default(now()) @db.DateTime(0)
-  updatedAt          DateTime            @default(now()) @db.DateTime(0)
-  title              String              
-  author             String              
-  description        String?             @db.Text
-  composerId         Int
-  playstyleId        Int?
-  playstyle          Playstyle?          @relation(fields: [playstyleId], references: [id])
-  composer           Composer            @relation(fields: [composerId], references: [id])
-  tuneGenres         TuneGenresGenre[]
+  id           Int               @id @default(autoincrement())
+  createdAt    DateTime          @default(now()) @db.DateTime(0)
+  updatedAt    DateTime          @default(now()) @db.DateTime(0)
+  title        String
+  author       String
+  description  String?           @db.Text
+  wikipedia_ja String?
+  wikipedia_en String?
+  imslp        String?
+  composerId   Int
+  playstyleId  Int
+  playstyle    Playstyle         @relation(fields: [playstyleId], references: [id])
+  composer     Composer          @relation(fields: [composerId], references: [id])
+  tuneGenres   TuneGenresGenre[]
+  tuneParts    TunePart[]
 
   @@unique([title, playstyleId, composerId])
   @@index([playstyleId])
@@ -79,10 +83,75 @@ model Tune {
 model TuneGenresGenre {
   tuneId  Int
   genreId Int
-  tune    Tune   @relation(fields: [tuneId], references: [id])
-  genre   Genre  @relation(fields: [genreId], references: [id])
+  tune    Tune  @relation(fields: [tuneId], references: [id])
+  genre   Genre @relation(fields: [genreId], references: [id])
 
   @@id([tuneId, genreId])
   @@index([tuneId])
   @@index([genreId])
+}
+
+// 金管とか
+model PartGroupCategory {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  partGroups PartGroup[]
+}
+
+// フルートパートとかトランペットパートとか
+model PartGroup {
+  id                  Int               @id @default(autoincrement())
+  name                String            @unique
+  partGroupCategoryId Int
+  PartGroupCategory   PartGroupCategory @relation(fields: [partGroupCategoryId], references: [id])
+  tuneParts           TunePart[]
+
+  @@index([partGroupCategoryId])
+}
+
+// 曲にどういうパートがいるか、パートをまとめるもの
+model TunePart {
+  id          Int       @id @default(autoincrement())
+  tuneId      Int
+  partGroupId Int
+  Tune        Tune      @relation(fields: [tuneId], references: [id])
+  PartGroup   PartGroup @relation(fields: [partGroupId], references: [id])
+  parts       Part[]
+
+  @@index([tuneId])
+  @@index([partGroupId])
+}
+
+// イメージはパート譜1つ
+model Part {
+  id                Int                 @id @default(autoincrement())
+  partName          String
+  tunePartId        Int
+  mainInstrumentId  Int
+  TunePart          TunePart            @relation(fields: [tunePartId], references: [id])
+  mainInstrument    Instrument          @relation(fields: [mainInstrumentId], references: [id])
+  partSubInstrument PartSubInstrument[]
+
+  @@index([tunePartId])
+  @@index([mainInstrumentId])
+}
+
+// 持ち替えの中間テーブル
+model PartSubInstrument {
+  partId       Int
+  instrumentId Int
+  part         Part       @relation(fields: [partId], references: [id])
+  instrument   Instrument @relation(fields: [instrumentId], references: [id])
+
+  @@id([partId, instrumentId])
+  @@index([partId])
+  @@index([instrumentId])
+}
+
+// 楽器。特殊楽器も含む
+model Instrument {
+  id                Int                 @id @default(autoincrement())
+  name              String              @unique
+  parts             Part[]
+  partSubInstrument PartSubInstrument[]
 }
