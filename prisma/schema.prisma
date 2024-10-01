@@ -68,6 +68,8 @@ model Tune {
   wikipedia_ja String?
   wikipedia_en String?
   imslp        String?
+  timeMinutes  Int               @default(0)
+  key          String?
   composerId   Int
   playstyleId  Int
   playstyle    Playstyle         @relation(fields: [playstyleId], references: [id])
@@ -102,8 +104,9 @@ model PartGroupCategory {
 model PartGroup {
   id                  Int               @id @default(autoincrement())
   name                String            @unique
+  shortName           String            @unique
   partGroupCategoryId Int
-  PartGroupCategory   PartGroupCategory @relation(fields: [partGroupCategoryId], references: [id])
+  partGroupCategory   PartGroupCategory @relation(fields: [partGroupCategoryId], references: [id])
   tuneParts           TunePart[]
 
   @@index([partGroupCategoryId])
@@ -114,8 +117,8 @@ model TunePart {
   id          Int       @id @default(autoincrement())
   tuneId      Int
   partGroupId Int
-  Tune        Tune      @relation(fields: [tuneId], references: [id])
-  PartGroup   PartGroup @relation(fields: [partGroupId], references: [id])
+  tune        Tune      @relation(fields: [tuneId], references: [id])
+  partGroup   PartGroup @relation(fields: [partGroupId], references: [id])
   parts       Part[]
 
   @@index([tuneId])
@@ -124,13 +127,14 @@ model TunePart {
 
 // イメージはパート譜1つ
 model Part {
-  id                Int                 @id @default(autoincrement())
-  partName          String
-  tunePartId        Int
-  mainInstrumentId  Int
-  TunePart          TunePart            @relation(fields: [tunePartId], references: [id])
-  mainInstrument    Instrument          @relation(fields: [mainInstrumentId], references: [id])
-  partSubInstrument PartSubInstrument[]
+  id                 Int                 @id @default(autoincrement())
+  partName           String
+  tunePartId         Int
+  mainInstrumentId   Int
+  useMute            Boolean             @default(false)
+  TunePart           TunePart            @relation(fields: [tunePartId], references: [id])
+  mainInstrument     Instrument          @relation(fields: [mainInstrumentId], references: [id])
+  partSubInstruments PartSubInstrument[]
 
   @@index([tunePartId])
   @@index([mainInstrumentId])
@@ -152,6 +156,8 @@ model PartSubInstrument {
 model Instrument {
   id                Int                 @id @default(autoincrement())
   name              String              @unique
+  shortName         String              @unique
+  description       String?             @db.Text
   parts             Part[]
   partSubInstrument PartSubInstrument[]
 }

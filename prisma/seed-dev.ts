@@ -82,6 +82,16 @@ async function main() {
     update: {},
     create: {
       name: 'フルート',
+      shortName: 'Fl',
+    },
+  });
+
+  const piccInstrument = await prisma.instrument.upsert({
+    where: { name: 'ピッコロ' },
+    update: {},
+    create: {
+      name: 'ピッコロ',
+      shortName: 'Picc',
     },
   });
 
@@ -90,6 +100,7 @@ async function main() {
     update: {},
     create: {
       name: 'ホルン',
+      shortName: 'Hr',
     },
   });
 
@@ -98,6 +109,7 @@ async function main() {
     update: {},
     create: {
       name: 'フルート',
+      shortName: 'Fl',
       partGroupCategoryId: woodPartGroupCategory.id,
     },
   });
@@ -107,6 +119,7 @@ async function main() {
     update: {},
     create: {
       name: 'ホルン',
+      shortName: 'Hr',
       partGroupCategoryId: brassPartGroupCategory.id,
     },
   });
@@ -153,6 +166,8 @@ async function main() {
           wikipedia_ja: 'url',
           wikipedia_en: 'url',
           imslp: 'url',
+          timeMinutes: 40,
+          key: 'ハ短調',
           composerId: brahms.id,
           playstyleId: orchestraPlaystyle.id,
           tuneGenres: {
@@ -173,6 +188,13 @@ async function main() {
                     {
                       partName: '2nd',
                       mainInstrumentId: fluteInstrument.id,
+                      partSubInstruments: {
+                        create: [{ instrumentId: piccInstrument.id }],
+                      },
+                    },
+                    {
+                      partName: 'picc',
+                      mainInstrumentId: piccInstrument.id,
                     },
                   ],
                 },

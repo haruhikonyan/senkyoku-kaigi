@@ -64,6 +64,8 @@ CREATE TABLE `Tune` (
     `wikipedia_ja` VARCHAR(191) NULL,
     `wikipedia_en` VARCHAR(191) NULL,
     `imslp` VARCHAR(191) NULL,
+    `timeMinutes` INTEGER NOT NULL DEFAULT 0,
+    `key` VARCHAR(191) NULL,
     `composerId` INTEGER NOT NULL,
     `playstyleId` INTEGER NOT NULL,
 
@@ -96,9 +98,11 @@ CREATE TABLE `PartGroupCategory` (
 CREATE TABLE `PartGroup` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
+    `shortName` VARCHAR(191) NOT NULL,
     `partGroupCategoryId` INTEGER NOT NULL,
 
     UNIQUE INDEX `PartGroup_name_key`(`name`),
+    UNIQUE INDEX `PartGroup_shortName_key`(`shortName`),
     INDEX `PartGroup_partGroupCategoryId_idx`(`partGroupCategoryId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -120,6 +124,7 @@ CREATE TABLE `Part` (
     `partName` VARCHAR(191) NOT NULL,
     `tunePartId` INTEGER NOT NULL,
     `mainInstrumentId` INTEGER NOT NULL,
+    `useMute` BOOLEAN NOT NULL DEFAULT false,
 
     INDEX `Part_tunePartId_idx`(`tunePartId`),
     INDEX `Part_mainInstrumentId_idx`(`mainInstrumentId`),
@@ -140,8 +145,11 @@ CREATE TABLE `PartSubInstrument` (
 CREATE TABLE `Instrument` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
+    `shortName` VARCHAR(191) NOT NULL,
+    `description` TEXT NULL,
 
     UNIQUE INDEX `Instrument_name_key`(`name`),
+    UNIQUE INDEX `Instrument_shortName_key`(`shortName`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
