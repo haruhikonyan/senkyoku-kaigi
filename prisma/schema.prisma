@@ -19,7 +19,7 @@ model Composer {
   fullName          String                     @unique
   description       String?                    @db.Text
   author            String
-  isTopPageLinked   Boolean                    @default(true)
+  isTopPageLinked   Boolean                    @default(false)
   composerCountries ComposerCountriesCountry[]
   tunes             Tune[]
 }
@@ -45,7 +45,7 @@ model Country {
 model Genre {
   id              Int               @id @default(autoincrement())
   name            String            @unique
-  isTopPageLinked Int               @default(0) @db.TinyInt
+  isTopPageLinked Boolean           @default(false)
   description     String?           @db.Text
   tuneGenres      TuneGenresGenre[]
 }
@@ -53,7 +53,7 @@ model Genre {
 model Playstyle {
   id          Int     @id @default(autoincrement())
   name        String  @unique
-  sortOrder   Int
+  sortOrder   Int     @unique
   description String? @db.Text
   tunes       Tune[]
 }
@@ -105,6 +105,7 @@ model PartGroup {
   id                  Int               @id @default(autoincrement())
   name                String            @unique
   shortName           String            @unique
+  sortOrder           Int               @unique
   partGroupCategoryId Int
   partGroupCategory   PartGroupCategory @relation(fields: [partGroupCategoryId], references: [id])
   tuneParts           TunePart[]
@@ -158,6 +159,7 @@ model Instrument {
   name              String              @unique
   shortName         String              @unique
   description       String?             @db.Text
+  sortOrder         Int                 @unique
   parts             Part[]
   partSubInstrument PartSubInstrument[]
 }

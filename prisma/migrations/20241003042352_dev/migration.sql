@@ -5,7 +5,7 @@ CREATE TABLE `Composer` (
     `fullName` VARCHAR(191) NOT NULL,
     `description` TEXT NULL,
     `author` VARCHAR(191) NOT NULL,
-    `isTopPageLinked` BOOLEAN NOT NULL DEFAULT true,
+    `isTopPageLinked` BOOLEAN NOT NULL DEFAULT false,
 
     UNIQUE INDEX `Composer_fullName_key`(`fullName`),
     PRIMARY KEY (`id`)
@@ -35,7 +35,7 @@ CREATE TABLE `Country` (
 CREATE TABLE `Genre` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
-    `isTopPageLinked` TINYINT NOT NULL DEFAULT 0,
+    `isTopPageLinked` BOOLEAN NOT NULL DEFAULT false,
     `description` TEXT NULL,
 
     UNIQUE INDEX `Genre_name_key`(`name`),
@@ -50,6 +50,7 @@ CREATE TABLE `Playstyle` (
     `description` TEXT NULL,
 
     UNIQUE INDEX `Playstyle_name_key`(`name`),
+    UNIQUE INDEX `Playstyle_sortOrder_key`(`sortOrder`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -99,10 +100,12 @@ CREATE TABLE `PartGroup` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `shortName` VARCHAR(191) NOT NULL,
+    `sortOrder` INTEGER NOT NULL,
     `partGroupCategoryId` INTEGER NOT NULL,
 
     UNIQUE INDEX `PartGroup_name_key`(`name`),
     UNIQUE INDEX `PartGroup_shortName_key`(`shortName`),
+    UNIQUE INDEX `PartGroup_sortOrder_key`(`sortOrder`),
     INDEX `PartGroup_partGroupCategoryId_idx`(`partGroupCategoryId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -147,9 +150,11 @@ CREATE TABLE `Instrument` (
     `name` VARCHAR(191) NOT NULL,
     `shortName` VARCHAR(191) NOT NULL,
     `description` TEXT NULL,
+    `sortOrder` INTEGER NOT NULL,
 
     UNIQUE INDEX `Instrument_name_key`(`name`),
     UNIQUE INDEX `Instrument_shortName_key`(`shortName`),
+    UNIQUE INDEX `Instrument_sortOrder_key`(`sortOrder`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
