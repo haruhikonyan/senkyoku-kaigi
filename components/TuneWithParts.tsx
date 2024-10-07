@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import type { Prisma } from '@prisma/client';
 import { useMemo } from 'react';
+import GenreLink from './GenreLink';
 
 // TODO: dataloader を使って N + 1 対策をする
 export const getTuneWhthParts = async (tuneId: number) => {
@@ -117,9 +118,7 @@ async function TuneWithParts({ tuneId }: { tuneId: number }) {
     <fieldset>
       <div className="d-flex gap-1">
         {tune.tuneGenres.map((tg) => (
-          <div key={tg.genre.name} className="badge bg-secondary">
-            {tg.genre.name}
-          </div>
+          <GenreLink key={tg.genreId} genre={tg.genre} />
         ))}
       </div>
       <h5>{tune.title}</h5>
