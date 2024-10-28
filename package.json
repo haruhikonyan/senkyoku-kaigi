@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
@@ -13,18 +13,24 @@
   "dependencies": {
     "@prisma/client": "^5.20.0",
     "bootstrap": "^5.3.3",
-    "next": "14.2.13",
-    "react": "^18",
-    "react-dom": "^18"
+    "next": "15.0.1",
+    "react": "19.0.0-rc-69d4b800-20241021",
+    "react-dom": "19.0.0-rc-69d4b800-20241021"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.2",
     "@prisma/client": "^5.20.0",
     "@types/node": "^22.7.4",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "prisma": "^5.20.0",
     "tsx": "^4.19.1",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "npm:types-react@19.0.0-rc.1",
+      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
+    }
   }
 }

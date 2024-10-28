@@ -15,13 +15,14 @@ export const getComposer = async (composerId: number) => {
   });
 };
 
-export default async function Page({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams: { genreIds: string[] | string | undefined };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ id: string }>;
+    searchParams: Promise<{ genreIds: string[] | string | undefined }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   // TODO: zod で変換とチェック
   const id = Number(params.id);
   // TODO: zod 使って変換とチェック
