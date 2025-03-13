@@ -1,5 +1,7 @@
 'use client';
 
+import { testhoge } from '@/actions/search-tunes';
+
 export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -7,6 +9,10 @@ export default function Navbar() {
         <a className="navbar-brand" href="#">
           Navbar
         </a>
+
+        <button type="button" onClick={() => testhoge()}>
+          hoge
+        </button>
         <button
           className="navbar-toggler"
           type="button"

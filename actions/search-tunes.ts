@@ -1,10 +1,11 @@
 import { prisma } from '@/lib/prisma';
+import { redirect } from 'next/navigation';
 
 type SearchParams = {
   composerId?: number;
   genreIds?: number[];
 };
-export const searchTuneIds = (params: SearchParams) => {
+export const searchTuneIds = async (params: SearchParams) => {
   const { composerId, genreIds } = params;
   return prisma.tune.findMany({
     where: {
@@ -28,4 +29,13 @@ export const searchTuneIds = (params: SearchParams) => {
       title: 'asc',
     },
   });
+};
+
+export const testhoge = async () => {
+  console.log('window');
+  console.log('window');
+  console.log('window');
+  console.log(window);
+  console.log('window');
+  redirect('/');
 };

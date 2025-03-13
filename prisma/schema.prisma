@@ -116,6 +116,7 @@ model PartGroup {
 // 曲にどういうパートがいるか、パートをまとめるもの
 model TunePart {
   id          Int       @id @default(autoincrement())
+  numberOfPeople Int?
   tuneId      Int
   partGroupId Int
   tune        Tune      @relation(fields: [tuneId], references: [id])
