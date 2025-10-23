@@ -9,16 +9,15 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 model Composer {
   id                Int                        @id @default(autoincrement())
   displayName       String
   fullName          String                     @unique
   description       String?                    @db.Text
-  author            String
+  author            String                     // レコード作成者
   isTopPageLinked   Boolean                    @default(false)
   composerCountries ComposerCountriesCountry[]
   tunes             Tune[]
@@ -60,10 +59,10 @@ model Playstyle {
 
 model Tune {
   id           Int               @id @default(autoincrement())
-  createdAt    DateTime          @default(now()) @db.DateTime(0)
-  updatedAt    DateTime          @default(now()) @db.DateTime(0)
+  createdAt    DateTime          @default(now()) @db.Timestamp(0)
+  updatedAt    DateTime          @updatedAt @db.Timestamp(0)  // 自動更新に変更
   title        String
-  author       String
+  author       String            // レコード作成者（管理者 or 一般ユーザ）
   description  String?           @db.Text
   wikipedia_ja String?
   wikipedia_en String?
@@ -115,22 +114,22 @@ model PartGroup {
 
 // 曲にどういうパートがいるか、パートをまとめるもの
 model TunePart {
-  id          Int       @id @default(autoincrement())
-  numberOfPeople Int?
-  tuneId      Int
-  partGroupId Int
-  tune        Tune      @relation(fields: [tuneId], references: [id])
-  partGroup   PartGroup @relation(fields: [partGroupId], references: [id])
-  parts       Part[]
+  id             Int       @id @default(autoincrement())
+  numberOfPeople Int       // 必須に変更
+  tuneId         Int
+  partGroupId    Int
+  tune           Tune      @relation(fields: [tuneId], references: [id])
+  partGroup      PartGroup @relation(fields: [partGroupId], references: [id])
+  parts          Part[]
 
   @@index([tuneId])
   @@index([partGroupId])
 }
 
-// イメージはパート譜1つ
+// イメージはパート譜1つ（partNameに1st, 2ndなどが入る）
 model Part {
   id                 Int                 @id @default(autoincrement())
-  partName           String
+  partName           String              // 例: "1st", "2nd", "Solo" など
   tunePartId         Int
   mainInstrumentId   Int
   useMute            Boolean             @default(false)

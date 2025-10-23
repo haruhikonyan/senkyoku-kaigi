@@ -7,10 +7,12 @@ services:
       - .env
     tty: true
   db:
-    image: mysql:9.0.1
+    image: postgres:18.0
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: senkyoku-kaigi
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql
 volumes:
-  mysql_data:
+  postgres_data:
