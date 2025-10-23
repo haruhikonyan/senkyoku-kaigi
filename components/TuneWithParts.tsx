@@ -54,9 +54,7 @@ function Parts({
     <>
       {useSubInstrument ? (
         <span
-          data-bs-toggle="tooltip"
-          data-bs-placement="top"
-          data-bs-title={
+          title={
             parts
               ?.map((part) => {
                 return part.partSubInstruments.length !== 0
@@ -91,7 +89,7 @@ function AllParts({ tuneParts }: { tuneParts: TuneParts }) {
         <div key={groupName}>
           <p>{groupName}</p>
           {tuneParts?.map((tunePart) => (
-            <div key={tunePart.id} className="d-flex gap-2">
+            <div key={tunePart.id} className="flex gap-2">
               {Object.entries(
                 Object.groupBy(
                   tunePart.parts,
@@ -116,7 +114,7 @@ async function TuneWithParts({ tuneId }: { tuneId: number }) {
   const tune = await getTuneWhthParts(tuneId);
   return (
     <fieldset>
-      <div className="d-flex gap-1">
+      <div className="flex gap-1">
         {tune.tuneGenres.map((tg) => (
           <GenreLink key={tg.genreId} genre={tg.genre} />
         ))}
@@ -126,7 +124,7 @@ async function TuneWithParts({ tuneId }: { tuneId: number }) {
       <p>調性: {tune.key}</p>
       <span>編成: </span>
       <AllParts tuneParts={tune.tuneParts} />
-      <div className="d-flex gap-2">
+      <div className="flex gap-2">
         {tune.wikipedia_ja != null && (
           <a href={tune.wikipedia_ja} target="_blank" rel="noreferrer">
             Wikipedia(日本語)

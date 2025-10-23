@@ -11,7 +11,9 @@ function GenreLink({ genre }: { genre: { id: number; name: string } }) {
   newSearchParams.append('genreIds', genre.id.toString());
   return (
     <Link href={`${pathname}?${newSearchParams.toString()}`}>
-      <div className="badge bg-secondary">{genre.name}</div>
+      <div className="inline-block px-2 py-1 text-sm font-semibold text-white bg-gray-600 rounded">
+        {genre.name}
+      </div>
     </Link>
   );
 }
